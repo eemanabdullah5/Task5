@@ -12,10 +12,14 @@ def calc(scores):
 
 def Result(n):
     a = calc(data[n])
-    if a >= 60:
-        return "PASS"
+    if a >= 90:
+        return "A"
+    elif a >= 75:
+        return "B"
+    elif a >= 60:
+        return "C"
     else:
-        return "FAIL"
+        return "F"
 
 
 def printReport():
@@ -24,7 +28,7 @@ def printReport():
     for n in data:
         a = calc(data[n])
         r = Result(n)
-        print(n + ": average=" + str(round(a, 2)) + " result=" + r)
+        print(n + ": average=" + str(round(a, 2)) + " grade=" + r)
 
 
 def topStudent():
