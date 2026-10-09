@@ -1,73 +1,77 @@
-# student grades program
-PASS_MARK = 60
+"""Student grades: averages, letter grades and a class report."""
+
 GRADE_A = 90
 GRADE_B = 75
-data = {"Ali": [85, 92, 78], "Sara": [90, 88, 95],
-        "Omar": [55, 61, 48], "Zara": [70, 65, 80]}
+PASS_MARK = 60
+
+SAMPLE_SCORES = {
+    "Ali": [85, 92, 78],
+    "Sara": [90, 88, 95],
+    "Omar": [55, 61, 48],
+    "Zara": [70, 65, 80],
+}
 
 
-def calc(scores):
-    t = 0
-    for i in range(len(scores)):
-        t = t + scores[i]
-    return t / len(scores)
+def average(scores):
+    """Return the mean of a non-empty list of scores."""
+    return sum(scores) / len(scores)
 
 
-def get_result(n):
-    a = calc(data[n])
-    if a >= GRADE_A:
+def letter_grade(scores):
+    """Return "A", "B", "C" or "F" for a student's average score."""
+    avg = average(scores)
+    if avg >= GRADE_A:
         return "A"
-    elif a >= GRADE_B:
+    if avg >= GRADE_B:
         return "B"
-    elif a >= PASS_MARK:
+    if avg >= PASS_MARK:
         return "C"
-    else:
-        return "F"
+    return "F"
 
 
-def printReport():
+def print_report(students):
+    """Print each student's average and letter grade."""
     print("Student Report")
     print("--------------")
-    for n in data:
-        a = calc(data[n])
-        r = get_result(n)
-        print(n + ": average=" + str(round(a, 2)) + " grade=" + r)
+    for name, scores in students.items():
+        print(f"{name}: average={round(average(scores), 2)} "
+              f"grade={letter_grade(scores)}")
 
 
-def topStudent():
-    best = None
-    bestAvg = 0
-    for n in data:
-        a = calc(data[n])
-        if a > bestAvg:
-            bestAvg = a
-            best = n
-    if best is None:
-        return "nobody"
-    return best
+def top_student(students):
+    """Return the name of the student with the highest average."""
+    return max(students, key=lambda name: average(students[name]))
 
 
-def classAverage():
-    total = 0
-    for n in data:
-        total = total + calc(data[n])
-    return total / len(data)
+def class_average(students):
+    """Return the mean of all the students' averages."""
+    return average([average(scores) for scores in students.values()])
 
 
-def addStudent(n, s):
+def add_student(students, name, raw_scores):
+    """Convert raw_scores to ints and add the student.
+
+    Raises ValueError if any score is not a whole number.
+    """
+    students[name] = [int(score) for score in raw_scores]
+
+
+def main():
+    """Build the sample class, add students and print the report."""
+    students = dict(SAMPLE_SCORES)
+    add_student(students, "Hamza", ["72", "68", "90"])
     try:
-        s = [int(x) for x in s]
+        add_student(students, "Bad", ["x", "y"])
     except ValueError:
         print("bad scores")
-        return
-    data[n] = s
+
+    print_report(students)
+    best = top_student(students)
+    print(f"Top student: {best} with average of "
+          f"{round(average(students[best]), 2)} "
+          "which is the highest in the class")
+    print(f"Class average: {round(class_average(students), 2)}")
 
 
 if __name__ == "__main__":
-    addStudent("Hamza", ["72", "68", "90"])
-    addStudent("Bad", ["x", "y"])
-    printReport()
-    print("Top student: " + topStudent() + " with average of "
-          + str(round(calc(data[topStudent()]), 2))
-          + " which is the highest in the class")
-    print("Class average: " + str(round(classAverage(), 2)))
+    main()
