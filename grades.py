@@ -1,4 +1,5 @@
 # student grades program
+PASS_MARK = 60
 data = {"Ali": [85, 92, 78], "Sara": [90, 88, 95],
         "Omar": [55, 61, 48], "Zara": [70, 65, 80]}
 
@@ -10,9 +11,9 @@ def calc(scores):
     return t / len(scores)
 
 
-def Result(n):
+def get_result(n):
     a = calc(data[n])
-    if a >= 60:
+    if a >= PASS_MARK:
         return "PASS"
     else:
         return "FAIL"
@@ -23,7 +24,7 @@ def printReport():
     print("--------------")
     for n in data:
         a = calc(data[n])
-        r = Result(n)
+        r = get_result(n)
         print(n + ": average=" + str(round(a, 2)) + " result=" + r)
 
 
